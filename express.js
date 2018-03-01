@@ -18,9 +18,9 @@ MongoClient.connect("mongodb://localhost:27017/moby", (err, client) => {
 
 app.post("/signInData", (req, res)=>{
    db.collection("users").find({username: req.body.username}).toArray((err, user)=>{
-       console.log(user);
         if (user[0].password === req.body.password){
             res.json(`Login successful!`); 
+            console.log("Log in sucess")
         } else if (err){
             res.json("Login unsuccessfull, dip-shit.");
         } else if (!user.length){
@@ -36,7 +36,6 @@ app.post('/signUpData', (req, res) => {
     db.collection('users').save(req.body, (err, result) => {
       if (err) return console.log(err);
       console.log('saved to database');
-      res.redirect('/');
     });
   });
 
