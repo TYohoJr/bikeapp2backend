@@ -21,22 +21,27 @@ MongoClient.connect("mongodb://localhost:27017/moby", (err, client) => {
 
 app.post("/signInData", (req, res) => {
     db.collection("users").find({ username: req.body.username }).toArray((err, user) => {
+        
         if (!user.length) {
             res.json("Login unsuccessfull, dip-shit.");
         } else if (err) {
             res.json("Login unsuccessfull, dip-shit.");
-        } else if (user[0].password === req.body.password) {
+        } 
+
+        bcrypt.compare(req.body.password, user[0].password, function(err, resolve) {
+            //res == true
+            console.log(resolve)
+         if (resolve === true) {
             res.json(`Login successful!`);
             console.log("Log in success")
         } else {
             console.log('You fucked up.')
             res.json("Login unsuccessfull, dip-shit.");
         }
+        });
     })
 });
-
-app.post('/signUpData', (req, res) => {
-
+    app.post('/signUpData', (req, res) => {
     if (req.body.username.length && req.body.password.length) {
         db.collection('users').find({ username: req.body.username }).toArray((err, dataMatch) => {
             if (!dataMatch.length) {
@@ -51,7 +56,6 @@ app.post('/signUpData', (req, res) => {
                             console.log('saved to database');
                         }
                     });
-
                 });
             } else {
                 res.json('This username already exists...asshole.')
@@ -60,9 +64,4 @@ app.post('/signUpData', (req, res) => {
     } else {
         res.json('Error: username or password can\'t be blank, toolbag')
     }
-});
-
-
-app.get("/testing", (req, res) => {
-    res.sendfile('testing.html');
 });
