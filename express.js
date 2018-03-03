@@ -32,7 +32,13 @@ app.post("/signInData", (req, res) => {
             //res == true
             console.log(resolve)
          if (resolve === true) {
-            res.json(`Login successful!`);
+            res.json({
+                message:'Login successful!', 
+                user: {
+                    username:user[0].username, 
+                    work:user[0].work
+                } 
+            });
             console.log("Log in success")
         } else {
             console.log('You fucked up.')
@@ -47,7 +53,7 @@ app.post("/signInData", (req, res) => {
             if (!dataMatch.length) {
                 bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
                     // Store hash in your password DB.
-                    db.collection('users').save({username: req.body.username, password: hash}, (err, result) => {
+                    db.collection('users').save({username: req.body.username, password: hash, work:req.body.work}, (err, result) => {
                         if (err) {
                             res.json("Failed")
                             return console.log(err);
