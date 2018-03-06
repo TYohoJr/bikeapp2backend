@@ -6,9 +6,10 @@ var MongoClient = require('mongodb').MongoClient;
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var jwt = require('jsonwebtoken');
+var path = require('path')
 require('dotenv').config();
 
-app.use(express.static("build"));
+app.use(express.static(path.join(__dirname, "build")));
 app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
