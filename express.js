@@ -35,6 +35,7 @@ MongoClient.connect(`mongodb://TYohoJr:${process.env.DB_PASS}@ds257838.mlab.com:
     if (err) return console.log(err)
     db = client.db("bike_app") // whatever your database name is
     app.listen(process.env.PORT || 8080, () => {
+        console.log(process.env.PORT)
         console.log("listening on 8080")
     })
 })
