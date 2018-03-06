@@ -32,7 +32,7 @@ function verifyToken(req, res, next) {
     }
 }
 
-MongoClient.connect(`mongodb://TYohoJr:${process.env.DB_PASS}@ds257838.mlab.com:57838/bike_app`, (err, client) => {
+MongoClient.connect(`mongodb://${DB_USER}:${process.env.DB_PASS}@ds257838.mlab.com:57838/bike_app`, (err, client) => {
     if (err) return console.log(err)
     db = client.db("bike_app") // whatever your database name is
     app.listen(process.env.PORT || 8080, () => {
