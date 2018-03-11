@@ -47,30 +47,32 @@ app.get("/", (req, res) => {
 
 app.post("/signInData", (req, res) => {
     db.collection("users").find({ username: req.body.username }).toArray((err, user) => {
-        console.log(user)
         if (!user.length) {
             res.json({
                 message: "Login unsuccessfull"
             });
         } else if (err) {
             res.json({
-                message:err
+                message: err
+            });
+        } else {
+            bcrypt.compare(req.body.password, user[0].password, function (err, resolve) {
+                if (resolve === true) {
+                    var token = jwt.sign(req.body.username, ('Secret'), {
+                    });
+                    console.log(`user: "${req.body.username}" has logged in at ${new Date()}`)
+                    res.json({
+                        message: "Login successful!",
+                        myToken: token
+                    });
+                } else if (resolve === false) {
+                    console.log(`user: "${req.body.username}" has failed a login in at ${new Date()}`)
+                    res.json({
+                        message: "Login failed!",
+                    })
+                }
             });
         }
-        bcrypt.compare(req.body.password, user[0].password, function (err, resolve) {
-            if (resolve === true) {
-                var token = jwt.sign(req.body.username, ('Secret'), {
-                });
-                res.json({
-                    message: "Login successful!",
-                    myToken: token
-                });
-            } else if (resolve === false) {
-                res.json({
-                    message: "Login failed!",
-                })
-            }
-        });
     })
 });
 
