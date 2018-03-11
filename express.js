@@ -49,7 +49,7 @@ app.post("/signInData", (req, res) => {
     db.collection("users").find({ username: req.body.username }).toArray((err, user) => {
         if (!user.length) {
             res.json({
-                message: "Login unsuccessfull"
+                message: "Username/Password doesn't match"
             });
         } else if (err) {
             res.json({
@@ -68,7 +68,7 @@ app.post("/signInData", (req, res) => {
                 } else if (resolve === false) {
                     console.log(`user: "${req.body.username}" has failed a login in at ${new Date()}`)
                     res.json({
-                        message: "Login failed!",
+                        message: "Username/Password doesn't match",
                     })
                 }
             });
@@ -97,7 +97,7 @@ app.post('/signUpData', (req, res) => {
             }
         })
     } else {
-        res.json('Error: username or password can\'t be blank')
+        res.json(`Error: username or password can't be blank`)
     }
 });
 
