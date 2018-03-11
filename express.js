@@ -14,7 +14,6 @@ app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var db;
-// var decoded = jwt.verify(token, 'Secret');
 
 function verifyToken(req, res, next) {
     var token = req.body.token;
