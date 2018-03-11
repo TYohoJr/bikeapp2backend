@@ -41,29 +41,31 @@ MongoClient.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds2
     })
 })
 
-app.get("/", (req, res) =>{
+app.get("/", (req, res) => {
     res.sendFile("index.html")
 })
 
 app.post("/signInData", (req, res) => {
     db.collection("users").find({ username: req.body.username }).toArray((err, user) => {
-
+        console.log(user)
         if (!user.length) {
-            res.json("Login unsuccessfull");
+            res.json({
+                message: "Login unsuccessfull"
+            });
         } else if (err) {
-            res.json("Login unsuccessfull");
+            res.json({
+                message:err
+            });
         }
         bcrypt.compare(req.body.password, user[0].password, function (err, resolve) {
-            //res == true
             if (resolve === true) {
-               var token = jwt.sign(req.body.username, ('Secret'), {
-                    //expiresInMinutes: 1440 // expires in 24 hours, no longer valid, probs deprecated
+                var token = jwt.sign(req.body.username, ('Secret'), {
                 });
                 res.json({
                     message: "Login successful!",
                     myToken: token
                 });
-            } else if(resolve === false){
+            } else if (resolve === false) {
                 res.json({
                     message: "Login failed!",
                 })
@@ -71,6 +73,7 @@ app.post("/signInData", (req, res) => {
         });
     })
 });
+
 app.post('/signUpData', (req, res) => {
     if (req.body.username.length && req.body.password.length) {
         db.collection('users').find({ username: req.body.username }).toArray((err, dataMatch) => {
@@ -97,14 +100,7 @@ app.post('/signUpData', (req, res) => {
 });
 
 app.post('/findRoute', verifyToken, (req, res) => {
-  // console.log(decode);
-  
-    //var decoded = jwt.decode(req.body.token, { complete: true });
-   // console.log(decoded.header);
-  //  console.log(decoded.payload)
-         db.collection('users').find({ username: res.locals.decode }).toArray((err, dataMatch) => {
-             res.json(dataMatch)
-            });
-    //  res.json()
+    db.collection('users').find({ username: res.locals.decode }).toArray((err, dataMatch) => {
+        res.json(dataMatch)
+    });
 })
-
