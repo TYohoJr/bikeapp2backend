@@ -1,7 +1,7 @@
 {
   "name": "bikeapp2backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "bikeapp2backend",
   "main": "express.js",
   "dependencies": {
     "bcrypt": "^1.0.3",
